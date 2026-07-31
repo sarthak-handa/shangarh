@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Shangarh Sainj Valley — A premium 2 Nights, 3 Days travel experience through the meadows, mountains, and temples of Himachal Pradesh.">
+  <meta name="keywords" content="Shangarh, Sainj Valley, Himachal Pradesh, trekking, Pundrik Rishi Lake, Shangchul Mahadev Temple, travel">
+  <title>Shangarh Sainj Valley — Meadows. Mountains. Memories.</title>
+
+  <!-- Preload hero image -->
+  <link rel="preload" href="images/hero.png" as="image">
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Favicon (mountain emoji) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏔</text></svg>">
+</head>
+<body>
+
+  <!-- ═══════════ LOADING SCREEN ═══════════ -->
+  <div class="loader" id="loader">
+    <div class="loader__mountains">
+      <div class="loader__peak loader__peak--1"></div>
+      <div class="loader__peak loader__peak--2"></div>
+      <div class="loader__peak loader__peak--3"></div>
+    </div>
+    <p class="loader__text">Loading Shangarh</p>
+  </div>
+
+  <!-- ═══════════ SCROLL PROGRESS ═══════════ -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- ═══════════ SCROLL TO TOP ═══════════ -->
+  <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
+
+  <!-- ═══════════ FLOATING BIRDS ═══════════ -->
+  <div class="floating-birds" id="floatingBirds" aria-hidden="true"></div>
+
+  <!-- ═══════════ NAVIGATION ═══════════ -->
+  <nav class="nav" id="navbar">
+    <div class="nav__inner">
+      <a href="#home" class="nav__logo"><span>🏔</span> Shangarh Sainj Valley</a>
+      <ul class="nav__links" id="navLinks">
+        <li><a href="#home" class="nav__link active">Home</a></li>
+        <li><a href="#journey" class="nav__link">Journey</a></li>
+        <li><a href="#places" class="nav__link">Places</a></li>
+        <li><a href="#stay" class="nav__link">Stay</a></li>
+        <li><a href="#gallery" class="nav__link">Gallery</a></li>
+        <li><a href="#packing" class="nav__link">Packing</a></li>
+        <li><a href="#checklist" class="nav__link">Checklist</a></li>
+        <li><a href="#footer" class="nav__link">Footer</a></li>
+      </ul>
+      <div class="nav__hamburger" id="hamburger" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════ HERO SECTION ═══════════ -->
+  <section class="hero" id="home">
+    <div class="hero__bg">
+      <img src="images/hero.png" alt="Panoramic view of Shangarh meadow in Sainj Valley with snow-capped Himalayan peaks" loading="eager">
+    </div>
+    <div class="hero__overlay"></div>
+
+    <!-- Animated Clouds -->
+    <div class="hero__clouds" aria-hidden="true">
+      <div class="cloud cloud--1"></div>
+      <div class="cloud cloud--2"></div>
+      <div class="cloud cloud--3"></div>
+    </div>
+
+    <!-- Floating Leaves -->
+    <div class="hero__leaves" id="heroLeaves" aria-hidden="true"></div>
+
+    <!-- Hero Content -->
+    <div class="hero__content">
+      <h1 class="hero__title">
+        <span>SHANGARH</span>
+        <span>Sainj Valley</span>
+      </h1>
+      <p class="hero__duration">2 Nights • 3 Days</p>
+      <p class="hero__subtitle">
+        Friends. Meadows. Music. Memories.
+      </p>
+      <div class="hero__buttons">
+        <a href="#journey" class="btn btn--primary">View Journey ↓</a>
+        <a href="#packing" class="btn btn--outline">Packing Checklist ✓</a>
+      </div>
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true">↓</div>
+  </section>
+
+  <!-- ═══════════ MOUNTAIN DIVIDER ═══════════ -->
+  <div class="section-divider" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,120 L0,60 Q180,0 360,50 Q540,100 720,40 Q900,0 1080,55 Q1260,100 1440,45 L1440,120 Z" fill="#F5F0E8"/>
+    </svg>
+  </div>
+
+  <!-- ═══════════ TRIP OVERVIEW ═══════════ -->
+  <section class="section overview" id="overview">
+    <div class="section__container">
+      <div class="reveal">
+        <p class="section__label">Trip Overview</p>
+        <h2 class="section__heading">An Escape Into the Wild</h2>
+        <p class="section__subheading">
+          Two nights under the open sky, three days of meadows, temples, waterfalls, and memories that will last a lifetime.
+        </p>
+      </div>
+
+      <div class="overview__grid stagger reveal">
+        <div class="overview__card">
+          <span class="overview__icon">⏱</span>
+          <p class="overview__card-title">Duration</p>
+          <p class="overview__card-value">2 Nights / 3 Days</p>
+        </div>
+        <div class="overview__card">
+          <span class="overview__icon">📍</span>
+          <p class="overview__card-title">Departure</p>
+          <p class="overview__card-value">Delhi</p>
+          <p class="overview__card-sub">Kashmere Gate Metro Station</p>
+        </div>
+        <div class="overview__card">
+          <span class="overview__icon">🚌</span>
+          <p class="overview__card-title">Transport</p>
+          <p class="overview__card-value">Overnight Bus</p>
+          <p class="overview__card-sub">Traveller / Volvo</p>
+        </div>
+        <div class="overview__card">
+          <span class="overview__icon">🏡</span>
+          <p class="overview__card-title">Stay</p>
+          <p class="overview__card-value">Woodzo Shangarh</p>
+          <p class="overview__card-sub">Cozy Mountain Homestay</p>
+        </div>
+      </div>
+
+      <!-- Stay Feature Card -->
+      <div class="overview__stay reveal" id="stay">
+        <div class="stay-card">
+          <div class="stay-card__gallery">
+            <img data-src="images/stay.png" alt="Woodzo Shangarh — Cozy wooden mountain homestay overlooking Himalayan valleys" class="lazy">
+            <span class="stay-card__badge">✦ Our Stay</span>
+          </div>
+          <div class="stay-card__info">
+            <h3 class="stay-card__name">Woodzo Shangarh</h3>
+            <p class="stay-card__location">📍 Shangarh, Sainj Valley, Himachal Pradesh</p>
+            <div class="stay-card__features">
+              <div class="stay-card__feature">
+                <span class="stay-card__feature-icon">🏔</span>
+                <span>Mountain Views</span>
+              </div>
+              <div class="stay-card__feature">
+                <span class="stay-card__feature-icon">🪵</span>
+                <span>Wooden Cottage</span>
+              </div>
+              <div class="stay-card__feature">
+                <span class="stay-card__feature-icon">🔥</span>
+                <span>Bonfire</span>
+              </div>
+              <div class="stay-card__feature">
+                <span class="stay-card__feature-icon">🍽</span>
+                <span>Homemade Food</span>
+              </div>
+              <div class="stay-card__feature">
+                <span class="stay-card__feature-icon">🌿</span>
+                <span>Garden View</span>
+              </div>
+              <div class="stay-card__feature">
+                <span class="stay-card__feature-icon">📶</span>
+                <span>Wi-Fi Available</span>
+              </div>
+            </div>
+            <div class="stay-card__rating">
+              <span class="stay-card__stars">★★★★★</span>
+              <span class="stay-card__rating-text">4.8 · Superhost · 120+ Reviews</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ ROAD JOURNEY (DAY 0) ═══════════ -->
+  <div class="section-divider" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,120 L0,50 Q240,0 480,60 Q720,120 960,30 Q1200,0 1440,70 L1440,120 Z" fill="#1B3A12"/>
+    </svg>
+  </div>
+
+  <section class="section journey" id="journey">
+    <div class="section__container">
+      <div class="reveal">
+        <p class="section__label">Day 0 · The Night Begins</p>
+        <h2 class="section__heading">Road to the Mountains</h2>
+        <p class="section__subheading">
+          The journey starts before the destination. Pack your bags, board the bus, and let the night carry you to the mountains.
+        </p>
+      </div>
+
+      <div class="timeline reveal">
+        <div class="timeline__item">
+          <div class="timeline__dot"></div>
+          <p class="timeline__time">Evening · 6:00 PM</p>
+          <h4 class="timeline__title">Reach Kashmere Gate Metro Station</h4>
+          <p class="timeline__desc">Meet the crew. The excitement begins right here at the metro station. Everyone gathers with their bags and smiles.</p>
+        </div>
+        <div class="timeline__item">
+          <div class="timeline__dot"></div>
+          <p class="timeline__time">Evening · 7:00 PM</p>
+          <h4 class="timeline__title">Board the Bus</h4>
+          <p class="timeline__desc">Climb aboard the overnight traveller. Window seats, playlist on, the city fading behind us.</p>
+        </div>
+        <div class="timeline__item">
+          <div class="timeline__dot"></div>
+          <p class="timeline__time">Night · 9:00 PM</p>
+          <h4 class="timeline__title">Murthal Dinner Stop</h4>
+          <p class="timeline__desc">The legendary Murthal paranthas. Butter dripping, chai steaming, laughter echoing. A tradition before every road trip.</p>
+        </div>
+        <div class="timeline__item">
+          <div class="timeline__dot"></div>
+          <p class="timeline__time">Night · 10:30 PM</p>
+          <h4 class="timeline__title">Fun & Games</h4>
+          <p class="timeline__desc">Cards, music, storytelling. The bus becomes a party on wheels. Someone starts playing guitar, and the night comes alive.</p>
+        </div>
+        <div class="timeline__item">
+          <div class="timeline__dot"></div>
+          <p class="timeline__time">Late Night</p>
+          <h4 class="timeline__title">Through the Night</h4>
+          <p class="timeline__desc">The city lights fade. Stars appear. The highway hums. Sleep takes over as the bus climbs into the mountains.</p>
+        </div>
+      </div>
+
+      <!-- Animated Road -->
+      <div class="journey__road" aria-hidden="true">
+        <div class="road__stars">
+          <span class="road__star" style="left:10%; top:15%">✦</span>
+          <span class="road__star" style="left:25%; top:8%; animation-delay:0.5s">✦</span>
+          <span class="road__star" style="left:45%; top:20%; animation-delay:1s">✦</span>
+          <span class="road__star" style="left:60%; top:5%; animation-delay:1.5s">✦</span>
+          <span class="road__star" style="left:80%; top:12%; animation-delay:0.8s">✦</span>
+          <span class="road__star" style="left:90%; top:25%; animation-delay:2s">✦</span>
+        </div>
+        <div class="road__line"></div>
+        <div class="road__dashes"></div>
+        <span class="road__bus">🚌</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ DAY 1 ═══════════ -->
+  <div class="section-divider" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,120 L0,70 Q360,0 720,60 Q1080,120 1440,40 L1440,120 Z" fill="#F5F0E8"/>
+    </svg>
+  </div>
+
+  <section class="section day" id="places">
+    <div class="section__container">
+      <div class="reveal">
+        <span class="day__label">☀️ Day 1</span>
+        <h2 class="section__heading">Arrival in Paradise</h2>
+      </div>
+
+      <div class="day__morning stagger reveal">
+        <span class="day__morning-item">🌅 Reach Shangarh</span>
+        <span class="day__morning-item">🚿 Freshen Up</span>
+        <span class="day__morning-item">🏡 Check-in at Woodzo</span>
+        <span class="day__morning-item">☕ Hot Chai</span>
+      </div>
+
+      <!-- Place 1: Shangarh Meadows -->
+      <div class="place-card reveal">
+        <div class="place-card__image">
+          <img data-src="images/meadows.png" alt="Shangarh Meadow — vast green alpine meadow with wooden temple and Himalayan peaks" class="lazy">
+        </div>
+        <div class="place-card__info">
+          <span class="place-card__number">01</span>
+          <h3 class="place-card__title">Shangarh Meadows</h3>
+          <p class="place-card__text">
+            One of the most beautiful meadows in the Himalayas. A vast carpet of green stretching to the edge of the world, with a centuries-old wooden temple at its heart. Walk barefoot, breathe deep, and let the mountains hold you.
+          </p>
+          <div class="place-card__tags">
+            <span class="place-card__tag">🌿 Meadow Walk</span>
+            <span class="place-card__tag">📸 Photography</span>
+            <span class="place-card__tag">🏛 Ancient Temple</span>
+            <span class="place-card__tag">🚁 Drone Shots</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Place 2: Barshangarh Waterfall -->
+      <div class="place-card reveal">
+        <div class="place-card__image">
+          <img data-src="images/waterfall.png" alt="Barshangarh Waterfall cascading through dense Himalayan forest" class="lazy">
+          <div class="water-ripple"></div>
+        </div>
+        <div class="place-card__info">
+          <span class="place-card__number">02</span>
+          <h3 class="place-card__title">Barshangarh Waterfall</h3>
+          <p class="place-card__text">
+            Hidden in the forest, this waterfall descends through moss-covered rocks into a crystal pool. The mist on your face, the roar of water, the absolute green everywhere — it's nature at its most raw and beautiful.
+          </p>
+          <div class="place-card__tags">
+            <span class="place-card__tag">💧 Waterfall</span>
+            <span class="place-card__tag">🌲 Forest Walk</span>
+            <span class="place-card__tag">📸 Photography</span>
+            <span class="place-card__tag">🔊 Nature Sounds</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Place 3: Shangchul Mahadev Temple -->
+      <div class="place-card reveal">
+        <div class="place-card__image">
+          <img data-src="images/temple.png" alt="Shangchul Mahadev Temple — ancient wooden Himachali temple with intricate carvings" class="lazy">
+        </div>
+        <div class="place-card__info">
+          <span class="place-card__number">03</span>
+          <h3 class="place-card__title">Shangchul Mahadev Temple <span class="temple-bell" aria-hidden="true">🔔</span></h3>
+          <p class="place-card__text">
+            A sacred wooden temple dedicated to Lord Shiva, adorned with exquisite Himachali wood carvings. Standing here, surrounded by deodar trees and silence, you feel the weight of centuries and the lightness of peace.
+          </p>
+          <div class="place-card__tags">
+            <span class="place-card__tag">🕉 Sacred Site</span>
+            <span class="place-card__tag">🪵 Wood Carvings</span>
+            <span class="place-card__tag">🧘 Peaceful</span>
+            <span class="place-card__tag">📜 History</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ EVENING / BONFIRE ═══════════ -->
+  <section class="evening" id="evening">
+    <div class="evening__bg">
+      <img data-src="images/bonfire.png" alt="Friends around a warm bonfire under a starry mountain sky" class="lazy">
+    </div>
+    <div class="evening__stars" id="eveningStars" aria-hidden="true"></div>
+    <div class="evening__content reveal">
+      <p class="section__label">Day 1 · Evening</p>
+      <h2 class="section__heading">When the Sun Sets</h2>
+      <div class="bonfire-anim" aria-hidden="true">
+        <div class="bonfire-anim__flame"></div>
+        <div class="bonfire-anim__logs"></div>
+        <div class="bonfire-anim__sparks" id="bonfireSparks"></div>
+      </div>
+      <p class="section__subheading" style="margin: 0 auto; color: var(--sage-light); text-align: center;">
+        The fire crackles. The guitar strums. Voices merge with the mountain wind. This is the moment you'll remember forever.
+      </p>
+      <div class="evening__activities stagger reveal">
+        <div class="evening__activity">
+          <span class="evening__activity-icon">🔥</span>
+          <span>Bonfire</span>
+        </div>
+        <div class="evening__activity">
+          <span class="evening__activity-icon">🎸</span>
+          <span>Music</span>
+        </div>
+        <div class="evening__activity">
+          <span class="evening__activity-icon">🍲</span>
+          <span>Dinner</span>
+        </div>
+        <div class="evening__activity">
+          <span class="evening__activity-icon">👫</span>
+          <span>Friends</span>
+        </div>
+        <div class="evening__activity">
+          <span class="evening__activity-icon">🌌</span>
+          <span>Stargazing</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ DAY 2 — TREK ═══════════ -->
+  <div class="section-divider" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,120 L0,40 Q180,0 360,60 Q540,100 720,30 Q900,0 1080,70 Q1260,120 1440,50 L1440,120 Z" fill="#FFFFFF"/>
+    </svg>
+  </div>
+
+  <section class="section day day--alt trek" id="trek">
+    <div class="section__container">
+      <div class="reveal">
+        <span class="day__label">🥾 Day 2</span>
+        <h2 class="section__heading">Trek to Pundrik Rishi Lake</h2>
+        <p class="section__subheading">Prepare yourself for a trek through pine forests, alpine meadows, and mountain streams — to reach the sacred Pundrik Rishi Lake and Temple.</p>
+      </div>
+
+      <div class="day__morning stagger reveal" style="margin-top: var(--space-2xl);">
+        <span class="day__morning-item">🌅 Early Breakfast</span>
+        <span class="day__morning-item">🎒 Prepare for Trek</span>
+        <span class="day__morning-item">🥾 Lace Up Boots</span>
+        <span class="day__morning-item">📸 Pack Camera</span>
+      </div>
+
+      <!-- Trek Info Cards -->
+      <div class="trek__info-grid stagger reveal">
+        <div class="trek__info-card">
+          <span class="trek__info-icon">📍</span>
+          <p class="trek__info-label">Destination</p>
+          <p class="trek__info-value">Pundrik Rishi Lake</p>
+        </div>
+        <div class="trek__info-card">
+          <span class="trek__info-icon">📏</span>
+          <p class="trek__info-label">Distance</p>
+          <p class="trek__info-value">3–4 km one way</p>
+        </div>
+        <div class="trek__info-card">
+          <span class="trek__info-icon">⛰</span>
+          <p class="trek__info-label">Difficulty</p>
+          <p class="trek__info-value">Easy–Moderate</p>
+        </div>
+        <div class="trek__info-card">
+          <span class="trek__info-icon">⏱</span>
+          <p class="trek__info-label">Duration</p>
+          <p class="trek__info-value">~2–3 Hours</p>
+        </div>
+      </div>
+
+      <!-- Elevation Profile -->
+      <div class="trek__elevation reveal" id="elevationProfile">
+        <p class="trek__elevation-label">Elevation Profile</p>
+        <svg class="trek__elevation-svg" viewBox="0 0 800 120">
+          <defs>
+            <linearGradient id="elevationGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#2D5016" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#2D5016" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path class="trek__elevation-area" d="M0,110 Q100,90 200,80 Q350,65 400,50 Q500,35 550,40 Q650,50 700,30 Q750,20 800,25 L800,120 L0,120 Z"/>
+          <path class="trek__elevation-path" d="M0,110 Q100,90 200,80 Q350,65 400,50 Q500,35 550,40 Q650,50 700,30 Q750,20 800,25"/>
+        </svg>
+      </div>
+
+      <!-- Trail Highlights -->
+      <div class="trek__highlights stagger reveal">
+        <div class="trek__highlight">
+          <span class="trek__highlight-icon">🌲</span>
+          <h4 class="trek__highlight-title">Pine Forest</h4>
+          <p class="trek__highlight-text">Walk through towering deodar cedars and thick pine groves</p>
+        </div>
+        <div class="trek__highlight">
+          <span class="trek__highlight-icon">🌿</span>
+          <h4 class="trek__highlight-title">Alpine Meadows</h4>
+          <p class="trek__highlight-text">Open grasslands with wildflowers and panoramic views</p>
+        </div>
+        <div class="trek__highlight">
+          <span class="trek__highlight-icon">💧</span>
+          <h4 class="trek__highlight-title">Mountain Streams</h4>
+          <p class="trek__highlight-text">Crystal clear water flowing through moss-covered rocks</p>
+        </div>
+        <div class="trek__highlight">
+          <span class="trek__highlight-icon">🏔</span>
+          <h4 class="trek__highlight-title">Summit Views</h4>
+          <p class="trek__highlight-text">Snow-capped peaks visible from every ridge</p>
+        </div>
+      </div>
+
+      <!-- Lake and Temple Cards -->
+      <div style="margin-top: var(--space-4xl);">
+        <div class="place-card reveal">
+          <div class="place-card__image">
+            <img data-src="images/lake.png" alt="Pundrik Rishi Lake — pristine alpine lake reflecting Himalayan peaks" class="lazy">
+          </div>
+          <div class="place-card__info">
+            <span class="place-card__number">04</span>
+            <h3 class="place-card__title">Pundrik Rishi Lake & Temple</h3>
+            <p class="place-card__text">
+              At the end of the trail, a pristine alpine lake awaits — perfectly still, reflecting the sky and mountains like a mirror. A small ancient temple sits on its shore. This is the kind of place that changes something inside you.
+            </p>
+            <div class="place-card__tags">
+              <span class="place-card__tag">🏕 Sacred Lake</span>
+              <span class="place-card__tag">🕉 Temple</span>
+              <span class="place-card__tag">🧘 Peace</span>
+              <span class="place-card__tag">🏔 Alpine Beauty</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trek Images Grid -->
+      <div class="place-card reveal" style="margin-top: var(--space-2xl);">
+        <div class="place-card__image">
+          <img data-src="images/forest.png" alt="Sunlit pine forest trail in the Himalayas" class="lazy">
+        </div>
+        <div class="place-card__info">
+          <span class="place-card__number">05</span>
+          <h3 class="place-card__title">Through the Forest</h3>
+          <p class="place-card__text">
+            The trail weaves through ancient pine forests where sunlight filters through the canopy in golden streams. Every step deeper into the forest feels like stepping further from the world and closer to yourself.
+          </p>
+          <div class="place-card__tags">
+            <span class="place-card__tag">🌲 Deodar Forest</span>
+            <span class="place-card__tag">🍃 Fresh Air</span>
+            <span class="place-card__tag">🐦 Bird Songs</span>
+            <span class="place-card__tag">✨ Magical</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Evening Return -->
+      <div class="reveal" style="margin-top: var(--space-4xl); text-align: center;">
+        <div class="day__morning stagger reveal" style="justify-content: center;">
+          <span class="day__morning-item">🔙 Return to Stay</span>
+          <span class="day__morning-item">🍲 Warm Dinner</span>
+          <span class="day__morning-item">🌙 Early Sleep</span>
+          <span class="day__morning-item">😌 Rest & Recover</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ DAY 3 — DEPARTURE ═══════════ -->
+  <div class="section-divider" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,120 L0,60 Q360,0 720,70 Q1080,120 1440,30 L1440,120 Z" fill="#F5F0E8"/>
+    </svg>
+  </div>
+
+  <section class="section day" id="day3">
+    <div class="section__container">
+      <div class="reveal">
+        <span class="day__label">🌄 Day 3</span>
+        <h2 class="section__heading">The Last Day</h2>
+        <p class="section__subheading">One last morning in the mountains. Make it count.</p>
+      </div>
+
+      <div class="day__morning stagger reveal" style="margin-top: var(--space-2xl);">
+        <span class="day__morning-item">☀️ Checkout</span>
+        <span class="day__morning-item">🍳 Breakfast</span>
+        <span class="day__morning-item">🧳 Pack Bags</span>
+      </div>
+
+      <!-- Departure Cards -->
+      <div class="departure__grid" style="margin-top: var(--space-3xl);">
+        <div class="departure__card reveal">
+          <div class="departure__card-img">
+            <img data-src="images/waterfall.png" alt="Rupi Raila Waterfall — a short hike from Shangarh" class="lazy">
+          </div>
+          <div class="departure__card-body">
+            <h3 class="departure__card-title">Rupi Raila Waterfall</h3>
+            <p class="departure__card-text">A beautiful 1 km hike takes you to this stunning waterfall. The perfect goodbye from the mountains.</p>
+            <span class="departure__card-badge">🥾 1 km Hike</span>
+          </div>
+        </div>
+
+        <div class="departure__card reveal">
+          <div class="departure__card-img">
+            <img data-src="images/rafting.png" alt="White water river rafting on a Himalayan river" class="lazy">
+          </div>
+          <div class="departure__card-body">
+            <h3 class="departure__card-title">River Rafting</h3>
+            <p class="departure__card-text">Optional adrenaline rush! White water rafting through the Himalayan rapids. An adventure you won't forget.</p>
+            <span class="departure__card-badge">💰 ₹500 · Optional</span>
+          </div>
+        </div>
+
+        <!-- Route Map -->
+        <div class="departure__route reveal">
+          <h3 class="departure__card-title">Return Journey</h3>
+          <p class="departure__card-text">Departing at 7 PM, we trace our way back through the mountains.</p>
+          <div class="route__steps">
+            <div class="route__step">
+              <div class="route__step-dot">🏔</div>
+              <span class="route__step-name">Shangarh</span>
+              <span class="route__step-time">7:00 PM</span>
+            </div>
+            <div class="route__line"></div>
+            <div class="route__step">
+              <div class="route__step-dot">🏙</div>
+              <span class="route__step-name">Chandigarh</span>
+              <span class="route__step-time">~2:00 AM</span>
+            </div>
+            <div class="route__line"></div>
+            <div class="route__step">
+              <div class="route__step-dot">🏛</div>
+              <span class="route__step-name">Delhi</span>
+              <span class="route__step-time">~7:00 AM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ PHOTO GALLERY ═══════════ -->
+  <div class="section-divider" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,120 L0,50 Q240,0 480,70 Q720,120 960,40 Q1200,0 1440,60 L1440,120 Z" fill="#FFFFFF"/>
+    </svg>
+  </div>
+
+  <section class="section gallery" id="gallery">
+    <div class="section__container">
+      <div class="reveal">
+        <p class="section__label">Gallery</p>
+        <h2 class="section__heading">A Glimpse of What Awaits</h2>
+        <p class="section__subheading">Every frame tells a story. Every vista takes your breath away.</p>
+      </div>
+
+      <div class="gallery__masonry reveal" id="galleryGrid">
+        <div class="gallery__item" data-caption="Shangarh Meadows — Where the sky meets the earth">
+          <img data-src="images/meadows.png" alt="Shangarh Meadows" class="lazy">
+          <div class="gallery__item-overlay"><span class="gallery__item-caption">Shangarh Meadows</span></div>
+        </div>
+        <div class="gallery__item" data-caption="Woodzo Shangarh — Our mountain home">
+          <img data-src="images/stay.png" alt="Woodzo Shangarh" class="lazy">
+          <div class="gallery__item-overlay"><span class="gallery__item-caption">Woodzo Shangarh</span></div>
+        </div>
+        <div class="gallery__item" data-caption="Barshangarh Waterfall — Nature's symphony">
+          <img data-src="images/waterfall.png" alt="Barshangarh Waterfall" class="lazy">
+          <div class="gallery__item-overlay"><span class="gallery__item-caption">Barshangarh Waterfall</span></div>
+        </div>
+        <div class="gallery__item" data-caption="Shangchul Mahadev Temple — Centuries of devotion">
+          <img data-src="images/temple.png" alt="Shangchul Mahadev Temple" class="lazy">
+          <div class="gallery__item-overlay"><span class="gallery__item-caption">Shangchul Mahadev Temple</span></div>
+        </div>
+        <div class="gallery__item" data-caption="Pundrik Rishi Lake — A mirror in the mountains">
+          <img data-src="images/lake.png" alt="Pundrik Rishi Lake" class="lazy">
+          <div class="gallery__item-overlay"><span class="gallery__item-caption">Pundrik Rishi Lake</span></div>
+        </div>
+        <div class="gallery__item" data-caption="Pine Forest — Sunlight through ancient trees">
+          <img data-src="images/forest.png" alt="Pine Forest" class="lazy">
+          <div class="gallery__item-overlay"><span class="gallery__item-caption">Pine Forest</span></div>
+        </div>
+        <div class="gallery__item" data-caption="Bonfire Night — Sparks and stories under the stars">
+          <img data-src="images/bonfire.png" alt="Bonfire Night" class="lazy">
+          <div class="gallery__item-overlay"><span class="gallery__item-caption">Bonfire Night</span></div>
+        </div>
+        <div class="gallery__item" data-caption="Night Sky — A galaxy above the mountains">
+          <img data-src="images/nightsky.png" alt="Night Sky" class="lazy">
+          <div class="gallery__item-overlay"><span class="gallery__item-caption">Night Sky</span></div>
+        </div>
+        <div class="gallery__item" data-caption="Mountain Roads — The winding path to paradise">
+          <img data-src="images/road.png" alt="Mountain Roads" class="lazy">
+          <div class="gallery__item-overlay"><span class="gallery__item-caption">Mountain Roads</span></div>
+        </div>
+        <div class="gallery__item" data-caption="Sunrise — Golden light over the Himalayas">
+          <img data-src="images/sunrise.png" alt="Sunrise over Himalayas" class="lazy">
+          <div class="gallery__item-overlay"><span class="gallery__item-caption">Sunrise</span></div>
+        </div>
+        <div class="gallery__item" data-caption="Trekking Trail — Onward and upward">
+          <img data-src="images/trek.png" alt="Trekking Trail" class="lazy">
+          <div class="gallery__item-overlay"><span class="gallery__item-caption">Trekking Trail</span></div>
+        </div>
+        <div class="gallery__item" data-caption="River Rafting — Adventure awaits">
+          <img data-src="images/rafting.png" alt="River Rafting" class="lazy">
+          <div class="gallery__item-overlay"><span class="gallery__item-caption">River Rafting</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ MEMORIES / QUOTES ═══════════ -->
+  <div class="section-divider" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,120 L0,60 Q360,10 720,70 Q1080,110 1440,40 L1440,120 Z" fill="#F5F0E8"/>
+    </svg>
+  </div>
+
+  <section class="section memories" id="memories">
+    <div class="section__container">
+      <div class="reveal">
+        <p class="section__label">Memories</p>
+        <h2 class="section__heading">Words We'll Carry</h2>
+      </div>
+
+      <div class="memories__quotes">
+        <div class="reveal memories__handwritten">
+          <p class="memories__quote">The mountains are calling and I must go.</p>
+          <p class="memories__author">John Muir</p>
+        </div>
+        <div class="reveal memories__handwritten">
+          <p class="memories__quote">Leave footprints. Take memories.</p>
+          <p class="memories__author">— On the Trail</p>
+        </div>
+        <div class="reveal memories__handwritten">
+          <p class="memories__quote">Some friendships begin on roads that lead to the mountains.</p>
+          <p class="memories__author">— Us</p>
+        </div>
+        <div class="reveal memories__handwritten">
+          <p class="memories__quote">It's not the mountain we conquer, but ourselves.</p>
+          <p class="memories__author">Edmund Hillary</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ PACKING SECTION ═══════════ -->
+  <div class="section-divider" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,120 L0,50 Q480,0 720,80 Q960,120 1440,30 L1440,120 Z" fill="#FFFFFF"/>
+    </svg>
+  </div>
+
+  <section class="section packing" id="packing">
+    <div class="section__container">
+      <div class="reveal">
+        <p class="section__label" id="checklist">Packing Checklist</p>
+        <h2 class="section__heading">Pack Smart. Travel Light.</h2>
+        <p class="section__subheading">Tick items off as you pack. Your progress is saved automatically.</p>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="packing__progress reveal" id="packingProgress">
+        <div class="packing__progress-circle">
+          <svg viewBox="0 0 120 120">
+            <circle class="packing__progress-bg" cx="60" cy="60" r="52"/>
+            <circle class="packing__progress-bar" id="progressCircle" cx="60" cy="60" r="52"
+              stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
+          </svg>
+          <div class="packing__progress-text">
+            <span class="packing__progress-percent" id="progressPercent">0%</span>
+            <span class="packing__progress-label">Packed</span>
+          </div>
+        </div>
+        <div class="packing__progress-stats">
+          <div class="packing__stat">
+            <span class="packing__stat-value" id="packedCount">0</span>
+            <span class="packing__stat-label">Packed</span>
+          </div>
+          <div class="packing__stat">
+            <span class="packing__stat-value" id="remainingCount">0</span>
+            <span class="packing__stat-label">Remaining</span>
+          </div>
+          <div class="packing__stat">
+            <span class="packing__stat-value" id="totalCount">0</span>
+            <span class="packing__stat-label">Total Items</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Packing Grid (4 columns) -->
+      <div class="packing__grid" id="packingGrid">
+        <!-- Columns will be generated by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FUN SECTION ═══════════ -->
+  <div class="section-divider" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,120 L0,70 Q240,0 480,50 Q720,100 960,30 Q1200,0 1440,60 L1440,120 Z" fill="#F5F0E8"/>
+    </svg>
+  </div>
+
+  <section class="section fun" id="fun">
+    <div class="section__container">
+      <div class="reveal">
+        <p class="section__label">Trip Vibes</p>
+        <h2 class="section__heading">Get Excited</h2>
+      </div>
+
+      <div class="fun__grid stagger reveal">
+        <!-- Countdown -->
+        <div class="fun__countdown">
+          <span class="fun__countdown-number counter" id="countdownDays">0</span>
+          <span class="fun__countdown-label">Days Until Departure</span>
+        </div>
+
+        <!-- Weather -->
+        <div class="fun__weather">
+          <span class="fun__weather-icon">⛅</span>
+          <span class="fun__weather-temp">18°C</span>
+          <span class="fun__weather-desc">Pleasant · Partly Cloudy</span>
+          <span class="fun__weather-label">Expected Weather in Shangarh</span>
+        </div>
+
+        <!-- Vibes -->
+        <div class="fun__vibes">
+          <p class="fun__vibes-title">Trip Vibes</p>
+          <div class="fun__vibe">
+            <span class="fun__vibe-name">🌿 Nature</span>
+            <span class="fun__vibe-stars">★★★★★</span>
+          </div>
+          <div class="fun__vibe">
+            <span class="fun__vibe-name">📸 Photography</span>
+            <span class="fun__vibe-stars">★★★★★</span>
+          </div>
+          <div class="fun__vibe">
+            <span class="fun__vibe-name">🏔 Adventure</span>
+            <span class="fun__vibe-stars">★★★★☆</span>
+          </div>
+          <div class="fun__vibe">
+            <span class="fun__vibe-name">😌 Relaxation</span>
+            <span class="fun__vibe-stars">★★★★★</span>
+          </div>
+          <div class="fun__vibe">
+            <span class="fun__vibe-name">🔥 Bonfire</span>
+            <span class="fun__vibe-stars">★★★★★</span>
+          </div>
+          <div class="fun__vibe">
+            <span class="fun__vibe-name">🍽 Food</span>
+            <span class="fun__vibe-stars">★★★★☆</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="footer" id="footer">
+    <div class="footer__bg">
+      <img data-src="images/nightsky.png" alt="Starry night sky over the Himalayas" class="lazy">
+    </div>
+    <div class="footer__stars" id="footerStars" aria-hidden="true"></div>
+
+    <div class="footer__content reveal">
+      <p class="footer__quote">
+        "This is our trip.<br>Let's make it unforgettable."
+      </p>
+
+      <div class="footer__campfire bonfire-anim" aria-hidden="true">
+        <div class="bonfire-anim__flame"></div>
+        <div class="bonfire-anim__logs"></div>
+        <div class="bonfire-anim__sparks" id="footerSparks"></div>
+      </div>
+
+      <div class="footer__silhouette" aria-hidden="true">
+        🧍🧍🧍🧍🧍🧍
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p>Shangarh Sainj Valley 2026 · Made with ❤️ for an unforgettable trip</p>
+    </div>
+  </footer>
+
+  <!-- ═══════════ LIGHTBOX ═══════════ -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox__close" id="lightboxClose" aria-label="Close lightbox">✕</button>
+    <img class="lightbox__img" id="lightboxImg" src="" alt="">
+    <p class="lightbox__caption" id="lightboxCaption"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
