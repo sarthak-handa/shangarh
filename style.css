@@ -520,6 +520,16 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 0.15em;
 }
 
+.hero__title-owner {
+  display: block;
+  font-size: 0.22em !important;
+  letter-spacing: 6px !important;
+  font-weight: 400 !important;
+  text-transform: uppercase !important;
+  opacity: 0.75;
+  margin-bottom: 0.3em;
+}
+
 .hero__duration {
   font-size: 1rem;
   letter-spacing: 6px;
@@ -2043,9 +2053,37 @@ h1, h2, h3, h4, h5, h6 {
 
 .fun__countdown-number {
   font-family: var(--font-display);
-  font-size: 5rem;
+  font-size: 3rem;
   font-weight: 700;
   line-height: 1;
+}
+
+.fun__countdown-timer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.fun__countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.fun__countdown-unit-label {
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.fun__countdown-sep {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 300;
+  opacity: 0.5;
+  margin-top: -16px;
 }
 
 .fun__countdown-label {

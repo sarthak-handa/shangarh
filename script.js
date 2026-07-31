@@ -462,21 +462,45 @@
   }
 
 
-  /* ── Countdown Timer ───────────────────────────────────── */
+  /* ── Live Countdown Timer ───────────────────────────────── */
   function initCountdown() {
-    var countdownEl = document.getElementById('countdownDays');
-    var tripDate = new Date(CONFIG.tripDate + 'T00:00:00');
+    var hoursEl = document.getElementById('countdownHours');
+    var minutesEl = document.getElementById('countdownMinutes');
+    var secondsEl = document.getElementById('countdownSeconds');
+
+    // Trip departure: 8:30 PM IST on July 31, 2026
+    // IST is UTC+5:30, so 8:30 PM IST = 15:00 UTC
+    var tripDate = new Date('2026-07-31T20:30:00+05:30');
+
+    function pad(n) {
+      return n < 10 ? '0' + n : String(n);
+    }
 
     function updateCountdown() {
       var now = new Date();
       var diff = tripDate - now;
-      var days = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
-      countdownEl.textContent = days;
+
+      if (diff <= 0) {
+        hoursEl.textContent = '00';
+        minutesEl.textContent = '00';
+        secondsEl.textContent = '00';
+        document.querySelector('.fun__countdown-label').textContent = '🎉 Trip has started!';
+        return;
+      }
+
+      var totalSeconds = Math.floor(diff / 1000);
+      var hours = Math.floor(totalSeconds / 3600);
+      var minutes = Math.floor((totalSeconds % 3600) / 60);
+      var seconds = totalSeconds % 60;
+
+      hoursEl.textContent = pad(hours);
+      minutesEl.textContent = pad(minutes);
+      secondsEl.textContent = pad(seconds);
     }
 
     updateCountdown();
-    // Update once per hour
-    setInterval(updateCountdown, 3600000);
+    // Update every second for live tracking
+    setInterval(updateCountdown, 1000);
   }
 
 
