@@ -1,0 +1,13 @@
+{
+  "name": "shangarh-sainj-valley",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Shangarh Sainj Valley microsite with Vercel Blob storage integration",
+  "main": "script.js",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@vercel/blob": "^0.27.1"
+  }
+}

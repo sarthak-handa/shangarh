@@ -61,6 +61,8 @@
     initCountdown();
     initAnimatedCounters();
     initElevationProfile();
+    initBlobUploader();
+    initBlobGallery();
   }
 
 
@@ -607,4 +609,474 @@
     };
   }
 
+
+  /* ── Vercel Blob Image Uploader & Gallery ──────────────── */
+  function initBlobUploader() {
+    var dropZone = document.getElementById('dropZone');
+    var fileInput = document.getElementById('fileInput');
+    var uploadPreviews = document.getElementById('uploadPreviews');
+    var previewGrid = document.getElementById('previewGrid');
+    var previewCount = document.getElementById('previewCount');
+    var clearPreviewsBtn = document.getElementById('clearPreviewsBtn');
+    var startUploadBtn = document.getElementById('startUploadBtn');
+    var progressWrapper = document.getElementById('progressWrapper');
+    var progressFill = document.getElementById('progressFill');
+    var progressPercentageText = document.getElementById('progressPercentageText');
+    var progressStatusText = document.getElementById('progressStatusText');
+    var folderSelect = document.getElementById('uploadFolderSelect');
+
+    var selectedFiles = [];
+    var ALLOWED_EXTS = ['jpg', 'jpeg', 'png', 'webp'];
+    var MAX_SIZE = 20 * 1024 * 1024; // 20MB
+
+    if (!dropZone || !fileInput) return;
+
+    // Drag & Drop events
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function (eventName) {
+      dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(function (eventName) {
+      dropZone.addEventListener(eventName, function () {
+        dropZone.classList.add('dragover');
+      }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(function (eventName) {
+      dropZone.addEventListener(eventName, function () {
+        dropZone.classList.remove('dragover');
+      }, false);
+    });
+
+    dropZone.addEventListener('drop', function (e) {
+      var dt = e.dataTransfer;
+      var files = dt.files;
+      handleFiles(files);
+    });
+
+    fileInput.addEventListener('change', function () {
+      handleFiles(this.files);
+      this.value = '';
+    });
+
+    clearPreviewsBtn.addEventListener('click', function () {
+      selectedFiles = [];
+      renderPreviews();
+    });
+
+    function handleFiles(files) {
+      var validFiles = [];
+      var errors = [];
+
+      Array.from(files).forEach(function (file) {
+        var ext = file.name.split('.').pop().toLowerCase();
+        if (!ALLOWED_EXTS.includes(ext)) {
+          errors.push('"' + file.name + '" is not an allowed format (jpg, jpeg, png, webp).');
+          return;
+        }
+        if (file.size > MAX_SIZE) {
+          errors.push('"' + file.name + '" exceeds the 20MB maximum file size.');
+          return;
+        }
+
+        var isDuplicate = selectedFiles.some(function (f) {
+          return f.name === file.name && f.size === file.size;
+        });
+
+        if (isDuplicate) {
+          errors.push('"' + file.name + '" is already selected.');
+          return;
+        }
+
+        validFiles.push(file);
+      });
+
+      if (errors.length > 0) {
+        showNotification(errors.join('<br>'), 'error');
+      }
+
+      if (validFiles.length > 0) {
+        selectedFiles = selectedFiles.concat(validFiles);
+        renderPreviews();
+      }
+    }
+
+    function renderPreviews() {
+      previewGrid.innerHTML = '';
+      if (selectedFiles.length === 0) {
+        uploadPreviews.classList.add('hidden');
+        return;
+      }
+
+      uploadPreviews.classList.remove('hidden');
+      previewCount.textContent = selectedFiles.length + (selectedFiles.length === 1 ? ' file selected' : ' files selected');
+
+      selectedFiles.forEach(function (file, index) {
+        var card = document.createElement('div');
+        card.className = 'preview-card';
+
+        var img = document.createElement('img');
+        img.className = 'preview-card__img';
+        img.alt = file.name;
+
+        createCompressedPreview(file, function (dataUrl) {
+          img.src = dataUrl;
+        });
+
+        var info = document.createElement('div');
+        info.className = 'preview-card__info';
+
+        var name = document.createElement('div');
+        name.className = 'preview-card__name';
+        name.textContent = file.name;
+
+        var size = document.createElement('div');
+        size.className = 'preview-card__size';
+        size.textContent = formatBytes(file.size);
+
+        info.appendChild(name);
+        info.appendChild(size);
+
+        var removeBtn = document.createElement('button');
+        removeBtn.className = 'preview-card__remove';
+        removeBtn.innerHTML = '✕';
+        removeBtn.title = 'Remove image';
+        removeBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          selectedFiles.splice(index, 1);
+          renderPreviews();
+        });
+
+        card.appendChild(img);
+        card.appendChild(info);
+        card.appendChild(removeBtn);
+        previewGrid.appendChild(card);
+      });
+    }
+
+    function createCompressedPreview(file, callback) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var img = new Image();
+        img.onload = function () {
+          var canvas = document.createElement('canvas');
+          var ctx = canvas.getContext('2d');
+          var maxWidth = 300;
+          var maxHeight = 300;
+          var width = img.width;
+          var height = img.height;
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height *= maxWidth / width;
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width *= maxHeight / height;
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+          callback(canvas.toDataURL('image/jpeg', 0.7));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    startUploadBtn.addEventListener('click', function () {
+      if (selectedFiles.length === 0) return;
+
+      var folder = folderSelect ? folderSelect.value : 'gallery';
+      startUploadBtn.disabled = true;
+      progressWrapper.classList.remove('hidden');
+      updateProgress(10, 'Uploading to Vercel Blob...');
+
+      uploadFilesWithRetry(selectedFiles, folder, 2)
+        .then(function (result) {
+          if (result.success && result.images) {
+            updateProgress(100, 'Upload complete!');
+            showNotification('Successfully uploaded ' + result.images.length + ' image(s) to Vercel Blob!', 'success');
+
+            result.images.forEach(function (image) {
+              addBlobToGallery(image);
+            });
+
+            selectedFiles = [];
+            renderPreviews();
+          } else {
+            showNotification(result.error || 'Upload failed.', 'error');
+          }
+        })
+        .catch(function (err) {
+          showNotification('Upload error: ' + (err.message || 'Network error'), 'error');
+        })
+        .finally(function () {
+          startUploadBtn.disabled = false;
+          setTimeout(function () {
+            progressWrapper.classList.add('hidden');
+          }, 1500);
+        });
+    });
+
+    function uploadFilesWithRetry(files, folder, retriesLeft) {
+      var formData = new FormData();
+      formData.append('folder', folder);
+      files.forEach(function (file) {
+        formData.append('files', file);
+      });
+
+      return fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      })
+        .then(function (res) {
+          if (!res.ok) {
+            return res.json().then(function (data) {
+              throw new Error(data.error || 'Server responded with status ' + res.status);
+            });
+          }
+          return res.json();
+        })
+        .catch(function (err) {
+          if (retriesLeft > 0) {
+            updateProgress(40, 'Retrying upload...');
+            return new Promise(function (resolve) {
+              setTimeout(resolve, 1000);
+            }).then(function () {
+              return uploadFilesWithRetry(files, folder, retriesLeft - 1);
+            });
+          }
+          throw err;
+        });
+    }
+
+    function updateProgress(percent, text) {
+      progressFill.style.width = percent + '%';
+      progressPercentageText.textContent = percent + '%';
+      if (text) progressStatusText.textContent = text;
+    }
+  }
+
+  /* ── Gallery Item Actions & Vercel Blob Sync ─────────────── */
+  function initBlobGallery() {
+    var galleryItems = document.querySelectorAll('#galleryGrid .gallery__item');
+    galleryItems.forEach(function (item) {
+      attachGalleryItemActions(item);
+    });
+
+    fetch('/api/list')
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data.success && Array.isArray(data.blobs)) {
+          data.blobs.forEach(function (blob) {
+            addBlobToGallery(blob);
+          });
+        }
+      })
+      .catch(function (err) {
+        console.log('Could not list blobs:', err);
+      });
+  }
+
+  function addBlobToGallery(blobData) {
+    var galleryGrid = document.getElementById('galleryGrid');
+    if (!galleryGrid) return;
+
+    var existing = galleryGrid.querySelector('[data-blob-url="' + blobData.url + '"]');
+    if (existing) return;
+
+    var item = document.createElement('div');
+    item.className = 'gallery__item revealed';
+    item.setAttribute('data-blob-url', blobData.url);
+    item.setAttribute('data-caption', blobData.pathname || 'Uploaded to Vercel Blob');
+
+    var img = document.createElement('img');
+    img.src = blobData.url;
+    img.alt = blobData.pathname || 'Vercel Blob Image';
+    img.loading = 'lazy';
+    img.className = 'loaded';
+
+    var overlay = document.createElement('div');
+    overlay.className = 'gallery__item-overlay';
+    var caption = document.createElement('span');
+    caption.className = 'gallery__item-caption';
+    caption.textContent = (blobData.pathname || 'Vercel Blob Image').split('/').pop();
+    overlay.appendChild(caption);
+
+    item.appendChild(img);
+    item.appendChild(overlay);
+
+    attachGalleryItemActions(item, blobData.url);
+
+    galleryGrid.insertBefore(item, galleryGrid.firstChild);
+
+    item.addEventListener('click', function (e) {
+      if (e.target.closest('.gallery__item-actions')) return;
+      var lightbox = document.getElementById('lightbox');
+      var lightboxImg = document.getElementById('lightboxImg');
+      var lightboxCaption = document.getElementById('lightboxCaption');
+      if (lightbox && lightboxImg) {
+        lightboxImg.src = blobData.url;
+        lightboxImg.alt = img.alt;
+        lightboxCaption.textContent = item.dataset.caption;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  }
+
+  function attachGalleryItemActions(item, blobUrl) {
+    if (item.querySelector('.gallery__item-actions')) return;
+
+    var img = item.querySelector('img');
+    var url = blobUrl || (img ? (img.src || img.dataset.src) : '');
+
+    var actionsContainer = document.createElement('div');
+    actionsContainer.className = 'gallery__item-actions';
+
+    // Copy URL Button
+    var copyBtn = document.createElement('button');
+    copyBtn.className = 'gallery-action-btn';
+    copyBtn.innerHTML = '📋 Copy';
+    copyBtn.title = 'Copy Image URL';
+    copyBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var targetUrl = url.startsWith('http') ? url : window.location.origin + '/' + url;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(targetUrl).then(function () {
+          showNotification('Image URL copied to clipboard!', 'success');
+        }).catch(function () {
+          fallbackCopyText(targetUrl);
+        });
+      } else {
+        fallbackCopyText(targetUrl);
+      }
+    });
+
+    // Download Button
+    var downloadBtn = document.createElement('button');
+    downloadBtn.className = 'gallery-action-btn';
+    downloadBtn.innerHTML = '⬇ Download';
+    downloadBtn.title = 'Download Image';
+    downloadBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      downloadImage(url, (item.dataset.caption || 'image').replace(/[^a-zA-Z0-9_\-]/g, '_'));
+    });
+
+    actionsContainer.appendChild(copyBtn);
+    actionsContainer.appendChild(downloadBtn);
+
+    // Delete Button (if it's a Vercel Blob URL or user uploaded item)
+    if (url && (url.includes('vercel-storage.com') || url.includes('public.blob.vercel-storage') || blobUrl)) {
+      var deleteBtn = document.createElement('button');
+      deleteBtn.className = 'gallery-action-btn gallery-action-btn--delete';
+      deleteBtn.innerHTML = '🗑 Delete';
+      deleteBtn.title = 'Delete from Vercel Blob';
+      deleteBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (confirm('Are you sure you want to delete this image from Vercel Blob?')) {
+          item.classList.add('deleting');
+          fetch('/api/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: url })
+          })
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+              if (data.success) {
+                showNotification('Image deleted successfully from Vercel Blob!', 'success');
+                item.remove();
+              } else {
+                item.classList.remove('deleting');
+                showNotification(data.error || 'Failed to delete image.', 'error');
+              }
+            })
+            .catch(function (err) {
+              item.classList.remove('deleting');
+              showNotification('Delete error: ' + err.message, 'error');
+            });
+        }
+      });
+      actionsContainer.appendChild(deleteBtn);
+    }
+
+    item.appendChild(actionsContainer);
+  }
+
+  function fallbackCopyText(text) {
+    var textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      showNotification('Image URL copied to clipboard!', 'success');
+    } catch (err) {
+      showNotification('Failed to copy URL.', 'error');
+    }
+    document.body.removeChild(textArea);
+  }
+
+  function downloadImage(url, filename) {
+    fetch(url)
+      .then(function (res) { return res.blob(); })
+      .then(function (blob) {
+        var a = document.createElement('a');
+        var objectUrl = URL.createObjectURL(blob);
+        a.href = objectUrl;
+        a.download = filename || 'download';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(objectUrl);
+      })
+      .catch(function () {
+        var a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.download = filename || 'download';
+        a.click();
+      });
+  }
+
+  function showNotification(message, type) {
+    var container = document.getElementById('uploadNotifications');
+    if (!container) return;
+
+    var toast = document.createElement('div');
+    toast.className = 'notification-toast notification-toast--' + type;
+    toast.innerHTML = (type === 'success' ? '✅ ' : '⚠️ ') + message;
+
+    container.appendChild(toast);
+
+    setTimeout(function () {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.3s ease';
+      setTimeout(function () {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 300);
+    }, 4000);
+  }
+
+  function formatBytes(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    var k = 1024;
+    var sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    var i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
 })();
+

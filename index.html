@@ -605,6 +605,69 @@
         <p class="section__subheading">Every frame tells a story. Every vista takes your breath away.</p>
       </div>
 
+      <!-- ═══════════ VERCEL BLOB UPLOAD SECTION ═══════════ -->
+      <div class="upload-container reveal" id="uploadContainer">
+        <div class="upload-header">
+          <div class="upload-header__title-group">
+            <h3 class="upload-title">☁️ Upload Memories (Vercel Blob Storage)</h3>
+            <p class="upload-subtitle">Drag and drop or select images to store directly in Vercel Blob.</p>
+          </div>
+          <div class="upload-folder-selector">
+            <label for="uploadFolderSelect" class="upload-folder-label">Destination Folder:</label>
+            <select id="uploadFolderSelect" class="upload-folder-dropdown">
+              <option value="uploads">uploads/</option>
+              <option value="gallery" selected>gallery/</option>
+              <option value="projects">projects/</option>
+              <option value="rooms">rooms/</option>
+              <option value="temp">temp/</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Drag & Drop Zone -->
+        <div class="drop-zone" id="dropZone">
+          <div class="drop-zone__content">
+            <span class="drop-zone__icon">📸</span>
+            <p class="drop-zone__title">Drag & drop your images here</p>
+            <p class="drop-zone__subtitle">Supports JPG, JPEG, PNG, WEBP • Max file size 20 MB</p>
+            <div class="drop-zone__btn-wrapper">
+              <label for="fileInput" class="btn btn--primary upload-btn">
+                <span>📁 Upload Images</span>
+              </label>
+              <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" multiple hidden>
+            </div>
+          </div>
+        </div>
+
+        <!-- Previews & Progress Section -->
+        <div class="upload-previews hidden" id="uploadPreviews">
+          <div class="upload-previews__bar">
+            <span class="upload-previews__count" id="previewCount">0 files selected</span>
+            <button type="button" class="btn btn--outline btn--sm" id="clearPreviewsBtn">Clear All</button>
+          </div>
+          <div class="preview-grid" id="previewGrid"></div>
+          
+          <div class="upload-actions">
+            <div class="upload-progress-wrapper hidden" id="progressWrapper">
+              <div class="upload-progress-info">
+                <span id="progressStatusText">Uploading files...</span>
+                <span id="progressPercentageText">0%</span>
+              </div>
+              <div class="upload-progress-track">
+                <div class="upload-progress-fill" id="progressFill"></div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn--primary upload-submit-btn" id="startUploadBtn">
+              <span>🚀 Upload to Vercel Blob</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="upload-notifications" id="uploadNotifications"></div>
+      </div>
+
       <div class="gallery__masonry reveal" id="galleryGrid">
         <div class="gallery__item" data-caption="Shangarh Meadows — Where the sky meets the earth">
           <img data-src="images/meadows.png" alt="Shangarh Meadows" class="lazy">
