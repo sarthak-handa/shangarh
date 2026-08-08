@@ -860,8 +860,10 @@
       reader.readAsDataURL(file);
     }
 
+    function compressImageIfNeeded(file, maxBytes) {
       maxBytes = maxBytes || (4 * 1024 * 1024);
       if (file.size <= maxBytes) {
+
         return Promise.resolve(file);
       }
 
