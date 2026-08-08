@@ -523,7 +523,7 @@
     checkPhotoDeepLink();
   }
 
-  function checkPhotoDeepLink() {
+  function checkPhotoDeepLink(loadedBlobs) {
     try {
       var pathname = window.location.pathname;
       var params = new URLSearchParams(window.location.search);
@@ -538,32 +538,56 @@
         targetPhoto = decodeURIComponent(hash.split('photo=').pop());
       }
 
-      if (targetPhoto) {
-        setTimeout(function () {
-          var gallerySec = document.getElementById('gallery');
-          if (gallerySec) gallerySec.scrollIntoView({ behavior: 'smooth' });
+      if (!targetPhoto) return;
 
-          var matchedImg = null;
-          var galleryImgs = document.querySelectorAll('#galleryGrid img');
-          galleryImgs.forEach(function (img) {
-            var src = img.src || img.dataset.src || '';
-            if (src.includes(targetPhoto) || targetPhoto.includes(src.split('/').pop())) {
-              matchedImg = img;
+      var targetClean = targetPhoto.split('/').pop().toLowerCase();
+
+      function attemptMatch() {
+        var matchedImgSrc = null;
+        var matchedCaption = null;
+
+        var galleryImgs = document.querySelectorAll('#galleryGrid img');
+        galleryImgs.forEach(function (img) {
+          var src = (img.src || img.dataset.src || '').toLowerCase();
+          var fn = src.split('/').pop();
+          if (src.includes(targetClean) || (fn && targetClean.includes(fn))) {
+            matchedImgSrc = img.src || img.dataset.src;
+            var item = img.closest('.gallery__item');
+            if (item) matchedCaption = item.dataset.caption || img.alt;
+          }
+        });
+
+        if (!matchedImgSrc && Array.isArray(loadedBlobs)) {
+          loadedBlobs.forEach(function (blob) {
+            var blobPath = (blob.pathname || blob.url || '').toLowerCase();
+            var blobFn = blobPath.split('/').pop();
+            if (blobPath.includes(targetClean) || (blobFn && targetClean.includes(blobFn))) {
+              matchedImgSrc = blob.url;
+              matchedCaption = blob.pathname ? blob.pathname.split('/').pop() : 'Gallery Photo';
             }
           });
+        }
 
-          if (matchedImg) {
-            var item = matchedImg.closest('.gallery__item');
-            var caption = item ? (item.dataset.caption || matchedImg.alt) : matchedImg.alt;
-            openLightbox(matchedImg.src || matchedImg.dataset.src, caption, matchedImg.alt);
-          } else {
-            var photoSrc = targetPhoto.startsWith('http') ? targetPhoto : (window.location.origin + '/' + targetPhoto);
-            openLightbox(photoSrc, 'Shared Memory — Shangarh Sainj Valley', 'Shared Photo');
-          }
-        }, 600);
+        if (matchedImgSrc) {
+          var gallerySec = document.getElementById('gallery');
+          if (gallerySec) gallerySec.scrollIntoView({ behavior: 'smooth' });
+          openLightbox(matchedImgSrc, matchedCaption || 'Shangarh Memory', 'Shared Photo');
+        } else if (!loadedBlobs) {
+          fetch('/api/list')
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+              if (data.success && Array.isArray(data.blobs)) {
+                checkPhotoDeepLink(data.blobs);
+              }
+            })
+            .catch(function () { });
+        }
       }
+
+      setTimeout(attemptMatch, 200);
     } catch (e) { }
   }
+
 
 
 
@@ -1053,12 +1077,14 @@
           data.blobs.forEach(function (blob) {
             addBlobToGallery(blob);
           });
+          checkPhotoDeepLink(data.blobs);
         }
       })
       .catch(function (err) {
         console.log('Could not list blobs:', err);
       });
   }
+
 
   function addBlobToGallery(blobData) {
     var galleryGrid = document.getElementById('galleryGrid');
