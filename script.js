@@ -117,6 +117,15 @@
       });
     });
 
+    // Close mobile menu when tapping outside
+    document.addEventListener('click', function (e) {
+      if (navLinks.classList.contains('open') && !e.target.closest('#navbar')) {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+      }
+    });
+
+
     // Active section highlighting
     function updateActiveLink() {
       var scrollPos = window.scrollY + 150;
@@ -423,12 +432,11 @@
   }
 
 
-  /* ── Gallery Lightbox ──────────────────────────────────── */
+  /* ── Gallery Lightbox & Photo Sharing ──────────────────── */
   function getShareableSiteLink(imgSrc) {
-    if (!imgSrc) return window.location.href;
-    var fullImgUrl = imgSrc.startsWith('http') ? imgSrc : (window.location.origin + '/' + imgSrc.replace(/^\//, ''));
-    var baseUrl = window.location.origin + window.location.pathname;
-    return baseUrl + '?photo=' + encodeURIComponent(fullImgUrl) + '#gallery';
+    if (!imgSrc) return window.location.origin + '/#gallery';
+    var filename = imgSrc.split('/').pop().replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    return window.location.origin + '/photo/' + encodeURIComponent(filename);
   }
 
   function copyTextToClipboard(text, successMsg) {
@@ -460,7 +468,7 @@
       shareSiteBtn.onclick = function (e) {
         e.stopPropagation();
         var siteLink = getShareableSiteLink(src);
-        copyTextToClipboard(siteLink, 'Website photo link copied! Sharing this opens your website.');
+        copyTextToClipboard(siteLink, 'Photo link copied! Sharing this opens your website with this photo.');
       };
     }
 
@@ -517,17 +525,46 @@
 
   function checkPhotoDeepLink() {
     try {
+      var pathname = window.location.pathname;
       var params = new URLSearchParams(window.location.search);
-      var photoUrl = params.get('photo');
-      if (photoUrl) {
+      var hash = window.location.hash;
+      var targetPhoto = null;
+
+      if (pathname.includes('/photo/') || pathname.includes('/gallery/')) {
+        targetPhoto = decodeURIComponent(pathname.split('/').pop());
+      } else if (params.get('photo')) {
+        targetPhoto = decodeURIComponent(params.get('photo'));
+      } else if (hash.includes('photo=')) {
+        targetPhoto = decodeURIComponent(hash.split('photo=').pop());
+      }
+
+      if (targetPhoto) {
         setTimeout(function () {
           var gallerySec = document.getElementById('gallery');
           if (gallerySec) gallerySec.scrollIntoView({ behavior: 'smooth' });
-          openLightbox(photoUrl, 'Shared Memory — Shangarh Sainj Valley', 'Shared Memory');
-        }, 800);
+
+          var matchedImg = null;
+          var galleryImgs = document.querySelectorAll('#galleryGrid img');
+          galleryImgs.forEach(function (img) {
+            var src = img.src || img.dataset.src || '';
+            if (src.includes(targetPhoto) || targetPhoto.includes(src.split('/').pop())) {
+              matchedImg = img;
+            }
+          });
+
+          if (matchedImg) {
+            var item = matchedImg.closest('.gallery__item');
+            var caption = item ? (item.dataset.caption || matchedImg.alt) : matchedImg.alt;
+            openLightbox(matchedImg.src || matchedImg.dataset.src, caption, matchedImg.alt);
+          } else {
+            var photoSrc = targetPhoto.startsWith('http') ? targetPhoto : (window.location.origin + '/' + targetPhoto);
+            openLightbox(photoSrc, 'Shared Memory — Shangarh Sainj Valley', 'Shared Photo');
+          }
+        }, 600);
       }
     } catch (e) { }
   }
+
 
 
 

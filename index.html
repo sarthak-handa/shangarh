@@ -605,18 +605,18 @@
         <p class="section__subheading">Every frame tells a story. Every vista takes your breath away.</p>
       </div>
 
-      <!-- ═══════════ VERCEL BLOB UPLOAD SECTION ═══════════ -->
+      <!-- ═══════════ GALLERY UPLOAD SECTION ═══════════ -->
       <div class="upload-container reveal" id="uploadContainer">
         <div class="upload-header">
           <div class="upload-header__title-group">
-            <h3 class="upload-title">☁️ Upload Memories (Vercel Blob Storage)</h3>
-            <p class="upload-subtitle">Drag and drop or select images to store directly in Vercel Blob.</p>
+            <h3 class="upload-title">📸 Add Photos to Gallery</h3>
+            <p class="upload-subtitle">Drag and drop or select multiple photos to add them directly to our trip gallery.</p>
           </div>
           <div class="upload-folder-selector">
             <label for="uploadFolderSelect" class="upload-folder-label">Destination Folder:</label>
             <select id="uploadFolderSelect" class="upload-folder-dropdown">
-              <option value="uploads">uploads/</option>
               <option value="gallery" selected>gallery/</option>
+              <option value="uploads">uploads/</option>
               <option value="projects">projects/</option>
               <option value="rooms">rooms/</option>
               <option value="temp">temp/</option>
@@ -632,7 +632,7 @@
             <p class="drop-zone__subtitle">Supports JPG, JPEG, PNG, WEBP • Auto-optimizes HD photos (up to 50 MB)</p>
             <div class="drop-zone__btn-wrapper">
               <label for="fileInput" class="btn btn--primary upload-btn">
-                <span>📁 Upload Images</span>
+                <span>📁 Select Photos</span>
               </label>
               <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" multiple hidden>
             </div>
@@ -659,10 +659,11 @@
             </div>
 
             <button type="button" class="btn btn--primary upload-submit-btn" id="startUploadBtn">
-              <span>🚀 Upload to Vercel Blob</span>
+              <span>🚀 Add Photos to Gallery</span>
             </button>
           </div>
         </div>
+
 
         <!-- Notifications -->
         <div class="upload-notifications" id="uploadNotifications"></div>

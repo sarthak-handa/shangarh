@@ -2322,69 +2322,49 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-/* ── Responsive Design ───────────────────────────────────── */
-@media (max-width: 1024px) {
-  .overview__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+/* ── Comprehensive Multi-Device Responsive Design ───────── */
 
-  .stay-card {
-    grid-template-columns: 1fr;
+/* 1. Laptops & Large Tablets (max-width: 1200px) */
+@media (max-width: 1200px) {
+  .section {
+    padding: var(--space-4xl) var(--space-xl);
   }
-
-  .place-card {
-    grid-template-columns: 1fr;
-    gap: var(--space-xl);
-  }
-
-  .place-card:nth-child(even) {
-    direction: ltr;
-  }
-
-  .trek__info-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .trek__highlights {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .packing__grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .fun__grid {
-    grid-template-columns: 1fr;
-  }
-
   .gallery__masonry {
-    columns: 2;
-  }
-
-  .departure__grid {
-    grid-template-columns: 1fr;
+    columns: 3;
+    column-gap: var(--space-md);
   }
 }
 
-@media (max-width: 768px) {
+/* 2. Tablets, Foldables Unfolded & Medium Screens (max-width: 992px) */
+@media (max-width: 992px) {
   :root {
-    --nav-height: 60px;
+    --nav-height: 64px;
+  }
+
+  .nav {
+    padding: 0 var(--space-lg);
   }
 
   .nav__links {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 80%;
-    max-width: 320px;
-    height: 100vh;
+    width: 82%;
+    max-width: 360px;
+    height: 100dvh;
     background: rgba(245, 240, 232, 0.98);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
     flex-direction: column;
-    padding: calc(var(--nav-height) + var(--space-2xl)) var(--space-2xl);
+    padding: calc(var(--nav-height) + var(--space-2xl)) var(--space-xl) var(--space-2xl);
     gap: var(--space-lg);
-    transition: right 0.5s var(--ease-out);
-    box-shadow: -10px 0 40px rgba(0,0,0,0.1);
+    transition: right 0.4s var(--ease-out);
+    box-shadow: -10px 0 40px rgba(0,0,0,0.15);
+    overflow-y: auto;
+    z-index: 1000;
   }
 
   .nav__links.open {
@@ -2393,26 +2373,122 @@ h1, h2, h3, h4, h5, h6 {
 
   .nav__links .nav__link {
     color: var(--charcoal);
-    font-size: 1.1rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    width: 100%;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
   }
 
   .nav__hamburger {
     display: flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
   }
 
+  .overview__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .stay-card {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    padding: var(--space-2xl);
+  }
+
+  .place-card {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-3xl);
+  }
+
+  .place-card:nth-child(even) {
+    direction: ltr !important;
+  }
+
+  .trek__info-grid,
+  .trek__highlights {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .departure__grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .fun__grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .gallery__masonry {
+    columns: 2;
+    column-gap: var(--space-md);
+  }
+}
+
+/* 3. Small Tablets & Large Phones (max-width: 768px) */
+@media (max-width: 768px) {
   .section {
     padding: var(--space-3xl) var(--space-md);
   }
 
-  .overview__grid {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-md);
+  .section__heading {
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
+  }
+
+  .section__subheading {
+    font-size: 0.98rem;
+  }
+
+  .hero {
+    min-height: 520px;
+    height: 100dvh;
+  }
+
+  .hero__content {
+    padding: 0 var(--space-md);
+  }
+
+  .hero__title {
+    font-size: clamp(2.2rem, 9vw, 4.5rem);
+    letter-spacing: -1px;
+  }
+
+  .hero__subtitle {
+    font-size: 1rem;
+  }
+
+  .hero__buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    width: 100%;
+    max-width: 320px;
+    margin: var(--space-xl) auto 0;
+  }
+
+  .hero__buttons .btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
   }
 
   .packing__progress {
     flex-direction: column;
     gap: var(--space-xl);
-    padding: var(--space-xl);
+    padding: var(--space-xl) var(--space-md);
+    text-align: center;
+  }
+
+  .packing__progress-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xl);
   }
 
   .packing__grid {
@@ -2421,37 +2497,31 @@ h1, h2, h3, h4, h5, h6 {
 
   .route__steps {
     flex-direction: column;
-    gap: var(--space-lg);
+    gap: var(--space-md);
   }
 
   .route__line {
     width: 2px;
-    height: 30px;
+    height: 24px;
     background: repeating-linear-gradient(
       180deg,
       var(--sage-green) 0,
-      var(--sage-green) 8px,
-      transparent 8px,
-      transparent 16px
+      var(--sage-green) 6px,
+      transparent 6px,
+      transparent 12px
     );
   }
 
-  .gallery__masonry {
-    columns: 1;
+  .timeline {
+    padding-left: 36px;
   }
 
-  .hero__buttons {
-    flex-direction: column;
-    align-items: center;
+  .timeline::before {
+    left: 14px;
   }
 
-  .hero__title {
-    letter-spacing: -1px;
-  }
-
-  .trek__info-grid,
-  .trek__highlights {
-    grid-template-columns: 1fr 1fr;
+  .timeline__dot {
+    left: -29px;
   }
 
   .floating-birds {
@@ -2461,34 +2531,123 @@ h1, h2, h3, h4, h5, h6 {
   .scroll-top {
     bottom: 20px;
     right: 20px;
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
   }
 }
 
-@media (max-width: 480px) {
+/* 4. Compact Mobile Phones (max-width: 576px) */
+@media (max-width: 576px) {
+  :root {
+    --nav-height: 56px;
+  }
+
+  .nav__logo {
+    font-size: 0.95rem;
+  }
+
   .overview__grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .trek__info-grid,
+  .trek__highlights {
     grid-template-columns: 1fr;
   }
 
   .stay-card {
-    padding: var(--space-xl);
-    gap: var(--space-xl);
+    padding: var(--space-lg);
   }
 
-  .packing__progress-stats {
-    gap: var(--space-xl);
+  .stay-card__name {
+    font-size: 1.5rem;
   }
 
+  .stay-card__features {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery__masonry {
+    columns: 1;
+  }
+
+  .upload-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .upload-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .drop-zone {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .preview-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
+
+  .lightbox__img {
+    max-width: 95vw;
+    max-height: 65vh;
+  }
+
+  .lightbox__actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .lightbox__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* 5. Ultra Narrow Mobile & Foldable Covers (e.g. Galaxy Z Fold 5 outer screen <= 380px, iPhone SE) */
+@media (max-width: 380px) {
   .hero__title {
-    font-size: clamp(2.5rem, 12vw, 4rem);
+    font-size: clamp(1.8rem, 11vw, 3rem);
   }
 
   .hero__duration {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+  }
+
+  .section {
+    padding: var(--space-2xl) 12px;
+  }
+
+  .nav {
+    padding: 0 12px;
+  }
+
+  .nav__logo {
+    font-size: 0.88rem;
+  }
+
+  .day__morning-item {
     font-size: 0.8rem;
-    letter-spacing: 4px;
+    padding: 8px 14px;
+  }
+
+  .fun__countdown-timer {
+    gap: 4px;
+  }
+
+  .fun__countdown-number {
+    font-size: 2rem;
+  }
+
+  .fun__countdown-sep {
+    font-size: 1.8rem;
   }
 }
+
 
 
 /* ── Lazy Load Animation ─────────────────────────────────── */
