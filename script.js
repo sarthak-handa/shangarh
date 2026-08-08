@@ -694,9 +694,7 @@
 
     var selectedFiles = [];
     var ALLOWED_EXTS = ['jpg', 'jpeg', 'png', 'webp'];
-    var MAX_SIZE = 20 * 1024 * 1024; // 20MB
-
-    if (!dropZone || !fileInput) return;
+    var MAX_SIZE = 50 * 1024 * 1024; // 50MB (Smart compressed before upload)
 
     // Drag & Drop events
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function (eventName) {
@@ -731,10 +729,12 @@
       this.value = '';
     });
 
-    clearPreviewsBtn.addEventListener('click', function () {
-      selectedFiles = [];
-      renderPreviews();
-    });
+    if (clearPreviewsBtn) {
+      clearPreviewsBtn.addEventListener('click', function () {
+        selectedFiles = [];
+        renderPreviews();
+      });
+    }
 
     function handleFiles(files) {
       var validFiles = [];
@@ -747,7 +747,7 @@
           return;
         }
         if (file.size > MAX_SIZE) {
-          errors.push('"' + file.name + '" exceeds the 20MB maximum file size.');
+          errors.push('"' + file.name + '" exceeds maximum allowed size (50MB).');
           return;
         }
 
@@ -804,7 +804,7 @@
 
         var size = document.createElement('div');
         size.className = 'preview-card__size';
-        size.textContent = formatBytes(file.size);
+        size.textContent = formatBytes(file.size) + (file.size > 4 * 1024 * 1024 ? ' (Will Auto-Optimize ⚡)' : '');
 
         info.appendChild(name);
         info.appendChild(size);
@@ -860,15 +860,80 @@
       reader.readAsDataURL(file);
     }
 
+      maxBytes = maxBytes || (4 * 1024 * 1024);
+      if (file.size <= maxBytes) {
+        return Promise.resolve(file);
+      }
+
+      return new Promise(function (resolve) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          var img = new Image();
+          img.onload = function () {
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            var maxDim = 2800; // Keep crisp 2.8K resolution
+            var width = img.width;
+            var height = img.height;
+
+            if (width > maxDim || height > maxDim) {
+              if (width > height) {
+                height = Math.round((height * maxDim) / width);
+                width = maxDim;
+              } else {
+                width = Math.round((width * maxDim) / height);
+                height = maxDim;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, width, height);
+
+            var outputType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+            canvas.toBlob(function (blob) {
+              if (!blob || blob.size >= file.size) {
+                resolve(file);
+              } else {
+                var compressedFile = new File([blob], file.name, {
+                  type: outputType,
+                  lastModified: Date.now()
+                });
+                console.log('Smart compressed ' + file.name + ': ' + (file.size / 1024 / 1024).toFixed(2) + 'MB -> ' + (compressedFile.size / 1024 / 1024).toFixed(2) + 'MB');
+                resolve(compressedFile);
+              }
+            }, outputType, 0.88);
+          };
+          img.onerror = function () { resolve(file); };
+          img.src = e.target.result;
+        };
+        reader.onerror = function () { resolve(file); };
+        reader.readAsDataURL(file);
+      });
+    }
+
     startUploadBtn.addEventListener('click', function () {
       if (selectedFiles.length === 0) return;
 
       var folder = folderSelect ? folderSelect.value : 'gallery';
       startUploadBtn.disabled = true;
       progressWrapper.classList.remove('hidden');
-      updateProgress(10, 'Uploading to Vercel Blob...');
+      updateProgress(10, 'Checking photo sizes...');
 
-      uploadFilesWithRetry(selectedFiles, folder, 2)
+      var compressionPromises = selectedFiles.map(function (file) {
+        if (file.size > 4 * 1024 * 1024) {
+          updateProgress(25, 'Optimizing photo: ' + file.name + '...');
+        }
+        return compressImageIfNeeded(file, 4 * 1024 * 1024);
+      });
+
+      Promise.all(compressionPromises)
+        .then(function (preparedFiles) {
+          updateProgress(50, 'Uploading to Vercel Blob...');
+          return uploadFilesWithRetry(preparedFiles, folder, 2);
+        })
         .then(function (result) {
           if (result.success && result.images) {
             updateProgress(100, 'Upload complete!');
@@ -894,6 +959,7 @@
           }, 1500);
         });
     });
+
 
     function uploadFilesWithRetry(files, folder, retriesLeft) {
       var formData = new FormData();
