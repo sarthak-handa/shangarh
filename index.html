@@ -915,8 +915,15 @@
   <div class="lightbox" id="lightbox">
     <button class="lightbox__close" id="lightboxClose" aria-label="Close lightbox">✕</button>
     <img class="lightbox__img" id="lightboxImg" src="" alt="">
-    <p class="lightbox__caption" id="lightboxCaption"></p>
+    <div class="lightbox__footer">
+      <p class="lightbox__caption" id="lightboxCaption"></p>
+      <div class="lightbox__actions" id="lightboxActions">
+        <button type="button" class="btn btn--primary btn--sm" id="lightboxShareSiteBtn">🔗 Share Website Link</button>
+        <button type="button" class="btn btn--outline btn--sm" id="lightboxShareWhatsappBtn">📱 Share on WhatsApp</button>
+      </div>
+    </div>
   </div>
+
 
   <script src="script.js"></script>
 </body>

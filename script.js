@@ -424,44 +424,111 @@
 
 
   /* ── Gallery Lightbox ──────────────────────────────────── */
-  function initGalleryLightbox() {
+  function getShareableSiteLink(imgSrc) {
+    if (!imgSrc) return window.location.href;
+    var fullImgUrl = imgSrc.startsWith('http') ? imgSrc : (window.location.origin + '/' + imgSrc.replace(/^\//, ''));
+    var baseUrl = window.location.origin + window.location.pathname;
+    return baseUrl + '?photo=' + encodeURIComponent(fullImgUrl) + '#gallery';
+  }
+
+  function copyTextToClipboard(text, successMsg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        showNotification(successMsg || 'Link copied to clipboard!', 'success');
+      }).catch(function () {
+        fallbackCopyText(text, successMsg);
+      });
+    } else {
+      fallbackCopyText(text, successMsg);
+    }
+  }
+
+  function openLightbox(src, captionText, altText) {
     var lightbox = document.getElementById('lightbox');
     var lightboxImg = document.getElementById('lightboxImg');
     var lightboxCaption = document.getElementById('lightboxCaption');
+    var shareSiteBtn = document.getElementById('lightboxShareSiteBtn');
+    var shareWhatsappBtn = document.getElementById('lightboxShareWhatsappBtn');
+
+    if (!lightbox || !lightboxImg) return;
+
+    lightboxImg.src = src;
+    lightboxImg.alt = altText || captionText || 'Gallery Image';
+    if (lightboxCaption) lightboxCaption.textContent = captionText || '';
+
+    if (shareSiteBtn) {
+      shareSiteBtn.onclick = function (e) {
+        e.stopPropagation();
+        var siteLink = getShareableSiteLink(src);
+        copyTextToClipboard(siteLink, 'Website photo link copied! Sharing this opens your website.');
+      };
+    }
+
+    if (shareWhatsappBtn) {
+      shareWhatsappBtn.onclick = function (e) {
+        e.stopPropagation();
+        var siteLink = getShareableSiteLink(src);
+        var message = 'Check out this photo from Shangarh Sainj Valley: ' + siteLink;
+        window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank');
+      };
+    }
+
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function initGalleryLightbox() {
+    var lightbox = document.getElementById('lightbox');
     var lightboxClose = document.getElementById('lightboxClose');
     var galleryItems = document.querySelectorAll('.gallery__item');
 
     galleryItems.forEach(function (item) {
-      item.addEventListener('click', function () {
+      item.addEventListener('click', function (e) {
+        if (e.target.closest('.gallery__item-actions')) return;
         var img = item.querySelector('img');
-        var caption = item.dataset.caption || '';
-        lightboxImg.src = img.src || img.dataset.src;
-        lightboxImg.alt = img.alt;
-        lightboxCaption.textContent = caption;
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        var src = img.src || img.dataset.src;
+        var caption = item.dataset.caption || img.alt || '';
+        openLightbox(src, caption, img.alt);
       });
     });
 
-    // Close lightbox
-    lightboxClose.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', function (e) {
-      if (e.target === lightbox) {
-        closeLightbox();
-      }
-    });
+    if (lightboxClose) {
+      lightboxClose.addEventListener('click', closeLightbox);
+    }
+    if (lightbox) {
+      lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) closeLightbox();
+      });
+    }
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+      if (e.key === 'Escape' && lightbox && lightbox.classList.contains('active')) {
         closeLightbox();
       }
     });
 
     function closeLightbox() {
-      lightbox.classList.remove('active');
+      if (lightbox) lightbox.classList.remove('active');
       document.body.style.overflow = '';
     }
+
+    checkPhotoDeepLink();
   }
+
+  function checkPhotoDeepLink() {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var photoUrl = params.get('photo');
+      if (photoUrl) {
+        setTimeout(function () {
+          var gallerySec = document.getElementById('gallery');
+          if (gallerySec) gallerySec.scrollIntoView({ behavior: 'smooth' });
+          openLightbox(photoUrl, 'Shared Memory — Shangarh Sainj Valley', 'Shared Memory');
+        }, 800);
+      }
+    } catch (e) { }
+  }
+
 
 
   /* ── Live Countdown Timer ───────────────────────────────── */
@@ -944,23 +1011,26 @@
     var actionsContainer = document.createElement('div');
     actionsContainer.className = 'gallery__item-actions';
 
-    // Copy URL Button
+    // Share Site Link Button
+    var shareBtn = document.createElement('button');
+    shareBtn.className = 'gallery-action-btn';
+    shareBtn.innerHTML = '🔗 Share';
+    shareBtn.title = 'Share link to website with this photo';
+    shareBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var siteLink = getShareableSiteLink(url);
+      copyTextToClipboard(siteLink, 'Website photo link copied to clipboard!');
+    });
+
+    // Copy Direct URL Button
     var copyBtn = document.createElement('button');
     copyBtn.className = 'gallery-action-btn';
-    copyBtn.innerHTML = '📋 Copy';
-    copyBtn.title = 'Copy Image URL';
+    copyBtn.innerHTML = '📋 Direct';
+    copyBtn.title = 'Copy Direct Image URL';
     copyBtn.addEventListener('click', function (e) {
       e.stopPropagation();
       var targetUrl = url.startsWith('http') ? url : window.location.origin + '/' + url;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(targetUrl).then(function () {
-          showNotification('Image URL copied to clipboard!', 'success');
-        }).catch(function () {
-          fallbackCopyText(targetUrl);
-        });
-      } else {
-        fallbackCopyText(targetUrl);
-      }
+      copyTextToClipboard(targetUrl, 'Direct image URL copied!');
     });
 
     // Download Button
@@ -973,8 +1043,10 @@
       downloadImage(url, (item.dataset.caption || 'image').replace(/[^a-zA-Z0-9_\-]/g, '_'));
     });
 
+    actionsContainer.appendChild(shareBtn);
     actionsContainer.appendChild(copyBtn);
     actionsContainer.appendChild(downloadBtn);
+
 
     // Delete Button (if it's a Vercel Blob URL or user uploaded item)
     if (url && (url.includes('vercel-storage.com') || url.includes('public.blob.vercel-storage') || blobUrl)) {
